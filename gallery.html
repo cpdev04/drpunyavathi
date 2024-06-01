@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/images/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <title>ABOUT</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/aos.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/mobile.css">
+    <style>
+        /* Your existing CSS styles */
+        /* ... */
+        .tiler {
+          display: inline-block;
+          cursor: pointer;
+          visibility: hidden;
+          width: 33.3%;
+          margin: auto;
+          padding: 5px;
+        }
+        .tiler img {
+          display: block;
+          margin: auto;
+          max-width: 100%;
+          height: auto;
+          visibility: visible;
+        }
+        .tiler .cell-grid {
+          background-position: center center;
+          margin: auto;
+          position: fixed;
+          top: 1em;
+          bottom: 1em;
+          left: 1em;
+          right: 1em;
+          z-index: 10;
+          max-width: 1000px;
+          max-height: 600px;
+          perspective: 30px;
+        }
+        .tiler .cell {
+          pointer-events: none;
+          opacity: 0;
+          transform: translateZ(-15px);
+          transform-style: preserve-3d;
+          transition-property: transform, opacity;
+          transition-duration: 0.5s, 0.4s;
+          transition-timing-function: cubic-bezier(0.65, 0.01, 0.15, 1.33);
+          /* The center character index */
+          --center-x: calc((var(--col-total) - 1) / 2);
+          --center-y: calc((var(--row-total) - 1) / 2);
+          /* Offset from center, positive & negative */
+          --offset-x: calc(var(--col-index) - var(--center-x));
+          --offset-y: calc(var(--row-index) - var(--center-y));
+          /* Absolute distance from center, only positive */
+          --distance-x: calc((var(--offset-x) * var(--offset-x)) / var(--center-x));
+          /* Absolute distance from center, only positive */
+          --distance-y: calc((var(--offset-y) * var(--offset-y)) / var(--center-y));
+          transition-delay: calc(0.1s * var(--distance-y) + 0.1s * var(--distance-x));
+        }
+        .tiler-overlay {
+          z-index: 2;
+        }
+        .tiler:hover .cell {
+          transform: scale(1);
+          opacity: 1;
+        }
+     
+        .main {
+          display: flex;
+          flex-wrap: wrap;
+          /* max-width: 800px; */
+          padding: 2em;
+          margin: auto;
+        }
+        .preview-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          z-index: 1000;
+        }
+        .preview-container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #fff;
+          padding: 20px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .preview-image {
+          display: block;
+          margin: auto;
+          max-width: 100%;
+          max-height: 70vh;
+        }
+        .preview-navigation {
+          text-align: center;
+          margin-top: 10px;
+        }
+        .preview-navigation button {
+          background-color: #333;
+          color: #fff;
+          border: none;
+          padding: 8px 16px;
+          margin: 0 5px;
+          cursor: pointer;
+        }
+    
+        @media (max-width: 768px) {
+          .preview-container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #fff;
+          padding: 20px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+          width: 350px;
+        }
+    }
+    
+      
+      </style>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="loader-mask">
+        <div class="loader">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- Preloader -->
+    
+    <!-- HEADER SECTION START HERE -->
+    <div class="header2-main-con header-main-con w-100 float-left">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="index.html">
+                    <figure class="mb-0">
+                        <img src="assets/images/banners/logo.png" alt="header-logo" loading="lazy" width="300px" height="60px">
+                    </figure>
+                </a>
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav font-weight-bold">
+                        <li>
+                            <a class="nav-link active  p-0 " href="index.html"  role="button"
+                                >
+                                HOME
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0 " href="about.html">ABOUT</a>
+                        </li>
+                        
+                        <li >
+                            <a class="nav-link  p-0" href="single-blog.html"  role="button"
+                               > ACTIVITIES
+                            </a>
+                        </li>
+                        <li >
+                            <a class="nav-link  p-0" href="gallery.html"  role="button"
+                               > GALLERY
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0" href="contact.html">CONTACT</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </nav>
+        </div>
+    </div>
+    <!-- HEADER SECTION END HERE -->
+
+    <!-- BANNER SECTION START HERE -->
+    <section class="sub-banner-section w-100 float-left">
+        <div class="container-fluid">
+            <div class="sub-banner-inner-con">
+                <div class="sub-banner-left-con">
+                    <h1 data-aos="fade-up" data-aos-duration="700">Gallery </h1>
+                    <p data-aos="fade-up" data-aos-duration="700">Welcome To The Heart Of Democracy, Where Every Voice Resonates And Every Vote Shapes The Destiny Of Our Nation.</p>
+                    <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-duration="700">
+                        <ol class="breadcrumb d-inline-block">
+                        <li class="breadcrumb-item d-inline-block"><a href="index.html">HOME</a></li>
+                        <li class="breadcrumb-item active text-white d-inline-block" aria-current="page">Gallery</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="sub-banner-right-con" >
+                    <div class="banner2-right-top-txt">
+                        <span class="d-inline-block">“Stands For A Better, <br> United Tomorrow.”</span>
+                    </div>
+                    <figure class="mb-0">
+                        <img src="assets/images/sub-banner-right-man-img.png" alt="sub-banner-right-man-img">
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- BANNER SECTION END HERE -->
+
+    <!-- gallery code -->
+    <div class="main">
+        <div class="tiler">
+          <img style="width: 100% ;height: 100% !important ;" src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(0)" />
+        </div>
+        
+        <div class="tiler">
+          <img  style="width: 100% ;height: 100% !important ;" src="https://www.drpunyavathicnagaraj.com/img/po_gal4.jpg" onclick="showPreview(1)" />
+        </div>
+        
+        <div class="tiler">
+          <img style="width: 100% ;height: 100% !important ;"  src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(2)" />
+        </div>
+        <div class="tiler">
+          <img  style="width: 100% ;height: 100% !important ;" src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(3)" />
+        </div>
+        
+        <div class="tiler">
+          <img  src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(4)" />
+        </div>
+        
+        <div class="tiler">
+          <img  style="width: 100% ;height: 100% !important ;" src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg"onclick="showPreview(5)" />
+        </div>
+        <div class="tiler">
+          <img   style="width: 100% ;height: 100% !important ;"  src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(6)" />
+        </div>
+        <div class="tiler">
+          <img   style="width: 100% ;height: 100% !important ;"  src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(7)" />
+        </div>
+        <div class="tiler">
+          <img   style="width: 100% ;height: 100% !important ;"  src="https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg" onclick="showPreview(8)" />
+        </div>
+        
+        <!-- Repeat for other images... -->
+        
+        <div class="preview-overlay" id="previewOverlay">
+          <div class="preview-container">
+            <span id="closeButton" style="cursor: pointer; position: absolute; top:-32px; right: -12px; font-size: 30px;color: white;"><i class="far fa-times-circle"></i></span>
+            <img class="preview-image" id="previewImage" src="" alt="Preview Image">
+            <div class="preview-navigation">
+              <button onclick="changePreview(-1)"><i class="text-warning fa-solid fas fa-backward"></i></button>
+              <button onclick="changePreview(1)"><i class="text-warning fa-solid fas fa-forward"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>    
+   
+    <!-- gallery code -->
+
+    <!-- FOOTER SECTION START HERE -->
+    <div class="footer-main-section w-100 float-left padding-top">
+        <div class="container">
+            <div class="footer-inner-con">
+                <div class="footer-logo-box">
+                    <a href="index.html">
+                        <figure>
+                            <img src="assets/images/banners/logo.png" alt="header-logo" width="214" height="60">
+                        </figure>
+                    </a>
+                    <p>Lorem ipsum dolor sit amet, consectetur adi <br>
+                        piscing elit, sed dorem ipsum dolor sit amet, <br> consectetur adipiscing elit.</p>
+                    <div class="header-contact-btn">
+                        <a href="tel:+18002345"><i class="fas fa-phone-alt"></i>+1 (800) 234 5</a>
+                    </div>
+                </div>
+                <div class="footer-list-box footer-links">
+                    <span class="small-txt d-block position-relative">SOCIAL HANDLES</span>
+                    <ul class="list-unstyled mb-0">
+                        <li class="position-relative"><a href="donation.html">Facebook</a></li>
+                        <li class="position-relative"><a href="contact.html">Twitter</a></li>
+                        <li class="position-relative"><a href="about.html">Instagram</a></li>
+                        <li class="position-relative"><a href="contact.html">linkedin</a></li>
+                        <li class="position-relative"><a href="contact.html">Whatsapp</a></li>
+                    </ul>
+                </div>
+                <div class="footer-list-box footer-links">
+                    <span class="small-txt d-block position-relative">QUICK LINKS</span>
+                    <ul class="list-unstyled mb-0">
+                        <li class="position-relative"><a href="index.html">Home</a></li>
+                        <li class="position-relative"><a href="about.html">About Us</a></li>
+                        <li class="position-relative"><a href="team.html">activities</a></li>
+                        <li class="position-relative"><a href="single-blog.html">Gallery</a></li>
+                        <li class="position-relative"><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-list-box footer-contact-box">
+                    <span class="small-txt d-block position-relative">CONTACT US</span>
+                    <ul class="list-unstyled">
+                        <li class="position-relative location"><i class="fas fa-map-marked-alt"></i> <a href="https://maps.app.goo.gl/YAT8je1YFxLGue7PA" target="_blank">121 King Street Melbourne, 3000, Australia</a></li>
+                        <li class="position-relative mail-address"><i class="fas fa-envelope"></i> <a href="mailto:info@unityforce.com">info@unityforce.com</a></li>
+                    </ul>
+                    <div class="footer-social-links">
+                        <a href="https://www.facebook.com/login/"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/i/flow/login"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Faccounts%2Fonetap%2F%3Fnext%3D%252F%26__coig_login%3D1"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright-inner-con">
+                <p class="mb-0">Copyright ©2024 <span class="d-inline-block">Punyavathi</span> All Rights Reserved.</p>
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER SECTION END HERE -->
+    <a id="button"></a>
+    <!-- js start -->
+    <script>
+        var images = [
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal4.jpg" ,
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+          "https://www.drpunyavathicnagaraj.com/img/po_gal5.jpg",
+    
+        ];
+    
+        var currentIndex = 0;
+    
+        function showPreview(index) {
+          currentIndex = index;
+          var previewOverlay = document.getElementById('previewOverlay');
+          var previewImage = document.getElementById('previewImage');
+    
+          previewImage.src = images[index];
+          previewOverlay.style.display = 'block';
+        }
+    
+        function changePreview(offset) {
+          currentIndex += offset;
+          if (currentIndex < 0) {
+            currentIndex = images.length - 1;
+          } else if (currentIndex >= images.length) {
+            currentIndex = 0;
+          }
+          showPreview(currentIndex);
+        }
+    
+        document.getElementById('closeButton').addEventListener('click', function() {
+          document.getElementById('previewOverlay').style.display = 'none';
+        });
+      </script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/aos.js"></script>
+    <script src="assets/js/owl.carousel.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script>
+        $(window).on('load', function () {
+            // Preloader
+            $('.loader').fadeOut();
+            $('.loader-mask').delay(350).fadeOut('slow');
+        });
+    </script>
+    <script>
+        var btn = $('#button');
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            }
+            else {
+                btn.removeClass('show');
+            }
+        });
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '300');
+        });
+    </script>
+    <script>
+        window.document.onkeydown = function (e) {
+            if (!e) {
+                e = event;
+            }
+            if (e.keyCode == 27) {
+                lightbox_close();
+            }
+        }
+
+        function lightbox_open() {
+            var lightBoxVideo = document.getElementById("VisaChipCardVideo");
+            document.getElementById('light').style.display = 'block';
+            document.getElementById('fade').style.display = 'block';
+            lightBoxVideo.play();
+        }
+
+        function lightbox_close() {
+            var lightBoxVideo = document.getElementById("VisaChipCardVideo");
+            document.getElementById('light').style.display = 'none';
+            document.getElementById('fade').style.display = 'none';
+            lightBoxVideo.pause();
+        }
+    </script>
+    <script>
+        $(document).ready(function ($) {
+            $(".owl-carousel").owlCarousel({
+                loop: false,
+                margin: 0,
+                dots: false,
+                nav: true,
+                items: 1 
+            });
+            var owl = $(".owl-carousel");
+            owl.owlCarousel();
+            $(".next-btn").click(function () {
+                owl.trigger("next.owl.carousel");
+            });
+            $(".prev-btn").click(function () {
+                owl.trigger("prev.owl.carousel");
+            });
+            $(".prev-btn").addClass("disabled");
+            $(owl).on("translated.owl.carousel", function (event) {
+                if ($(".owl-prev").hasClass("disabled")) {
+                    $(".prev-btn").addClass("disabled");
+                } else {
+                    $(".prev-btn").removeClass("disabled");
+                }
+                if ($(".owl-next").hasClass("disabled")) {
+                    $(".next-btn").addClass("disabled");
+                } else {
+                    $(".next-btn").removeClass("disabled");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
